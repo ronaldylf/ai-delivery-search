@@ -51,21 +51,90 @@ main.py         # Ponto de entrada
 
 ## Pré-requisitos
 
-- [uv](https://docs.astral.sh/uv/)
-- Python 3.13+
+- **Python 3.13+** (obrigatório em qualquer fluxo)
+- **[uv](https://docs.astral.sh/uv/)** (opcional — recomendado, mas não obrigatório)
+
+O repositório **não inclui** a pasta `.venv`. Depois de clonar, cada pessoa cria o ambiente virtual na própria máquina.
 
 ## Como executar
 
-Instale as dependências (cria o ambiente virtual na primeira vez):
+A saída mostra a rota encontrada, o número de trechos e a distância total em metros.
+
+Escolha **uma** das opções abaixo.
+
+### Opção A — com uv
+
+#### Instalar o uv
+
+**macOS / Linux:**
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Reabra o terminal (ou siga as instruções que o instalador mostrar) e confira:
+
+```bash
+uv --version
+```
+
+**Windows (PowerShell):**
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**Alternativa (se já tiver pip):**
+
+```bash
+pip install uv
+```
+
+Documentação completa: [https://docs.astral.sh/uv/getting-started/installation/](https://docs.astral.sh/uv/getting-started/installation/)
+
+#### Rodar o projeto
+
+Na pasta do repositório:
 
 ```bash
 uv sync
-```
-
-Execute o projeto:
-
-```bash
 uv run python main.py
 ```
 
-A saída mostra a rota encontrada, o número de trechos e a distância total em metros.
+- `uv sync` — cria o `.venv` e instala dependências de `pyproject.toml` / `uv.lock`
+- `uv run` — executa no ambiente do projeto **sem** precisar `source .venv/bin/activate`
+
+### Opção B — sem uv (pip + venv)
+
+Para quem **não quiser** instalar o uv, use só o Python padrão:
+
+```bash
+python3 -m venv .venv
+```
+
+Ative o ambiente virtual:
+
+```bash
+# macOS / Linux
+source .venv/bin/activate
+
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+```
+
+Instale as dependências e execute:
+
+```bash
+pip install -r requirements.txt
+python main.py
+```
+
+Com o `.venv` ativo, nas próximas vezes basta `python main.py`.
+
+### Atualizar `requirements.txt`
+
+Se alguém alterar dependências no `pyproject.toml` (fluxo com uv), regenere o arquivo para quem usa pip:
+
+```bash
+uv export --format requirements-txt --no-hashes -o requirements.txt
+```
